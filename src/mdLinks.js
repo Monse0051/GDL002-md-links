@@ -35,13 +35,6 @@ function getMdFiles(path) {
     return mdFiles;
 }
 
-
-function getArgs() {
-    let args = process.argv.slice(2);
-
-    return args;
-}
-
 /**
  * Reads a markdown string an returns a list of
  * Url objets  
@@ -91,10 +84,6 @@ function validateUrl(urlObj) {
 
 function getLinksFromMd(path){
 
-    //let args = getArgs();
-    //let path = args[0]; 
-    //let validateOption = true;
-
     let filesPaths = getMdFiles(path);
 
     let urlList = [];
@@ -138,7 +127,72 @@ function mdLinks(path, options) {
 }
 
 
-mdLinks("../test/md_files_test/test.md", {validate:true}).then( links => links.forEach( link => {console.log(link);} )).catch(err => console.log(err));
+//mdLinks("../test/md_files_test/test.md", {validate:true}).then( links => links.forEach( link => {console.log(link);} )).catch(err => console.log(err));
 
 
-module.exports = getMdFiles;
+module.exports = {
+    getMdFiles: getMdFiles, 
+    getUrls: getUrls,
+    mdLinks: mdLinks
+};
+
+function main() {
+    const commandLineArgs = require('command-line-args');
+
+    const optionDefinitions = [
+        {name: "validate", type: Boolean},
+        {name: "stats", type:Boolean},
+        {name: "path", type:String, defaultOption: true}
+    ];
+
+    const args = commandLineArgs(optionDefinitions);
+    
+    const path = args.path;
+    
+    const options = {
+        validate: args.validate === true,
+        stats: args.stats === true
+    };
+
+    mdLinks(path, options).then(urls =>{
+        if (options.stats === false) {
+            // print each url object
+            urls.forEach(url =>{
+                let strOk;
+                if (options.validate === true) {
+                    strOk = url.ok === true ? "ok" : "fail";
+                }
+                else{
+                    strOk = "";
+                }
+                let urlInfo =   url.file + "\t" +
+                                url.href + "\t" +
+                                url.text + "\t" + 
+                                strOk + "\t" +
+                                (url.status||"");
+                console.log(urlInfo);
+            });
+        }
+        else{
+            console.log("Total: ", urls.length);
+            console.log("Uniques: ", [...new Set(urls.map(url=>url.href))].length);
+
+            if (options.validate === true) {
+                let brokenLinks = 0;
+                for (let index = 0; index < urls.length; index++) {
+                    const url = urls[index];
+                    brokenLinks += url.ok === false?1:0;
+                }
+
+                console.log("Broken: ", brokenLinks);
+            }
+
+        }
+
+    }).catch( error => {
+        console.log(error);
+    });
+
+}
+
+main();

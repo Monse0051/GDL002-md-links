@@ -1,5 +1,7 @@
-[example](http://www.example.com)
+[text: example](http://www.example.com)
 
-[does not work](http://www.example.co)
+[text: does not work](http://www.example.co)
 
-[error 404](http://www.example.com/hola_mundo)
+[text: ejemplo de 404](http://www.example.com/hola_mundo)
+
+[text: example](http://www.example.com)
