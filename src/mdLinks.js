@@ -130,12 +130,6 @@ function mdLinks(path, options) {
 //mdLinks("../test/md_files_test/test.md", {validate:true}).then( links => links.forEach( link => {console.log(link);} )).catch(err => console.log(err));
 
 
-module.exports = {
-    getMdFiles: getMdFiles, 
-    getUrls: getUrls,
-    mdLinks: mdLinks
-};
-
 function main() {
     const commandLineArgs = require('command-line-args');
 
@@ -195,4 +189,12 @@ function main() {
 
 }
 
-main();
+//main();
+
+module.exports = {
+    getMdFiles: getMdFiles, 
+    getUrls: getUrls,
+    validateUrl: validateUrl,
+    getLinksFromMd: getLinksFromMd,
+    mdLinks: mdLinks,
+};
