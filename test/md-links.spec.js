@@ -7,9 +7,6 @@ const mdLinks = mdLink.mdLinks;
 // run tests with
 // npm test -- --collectCoverage
 
-// FIXME: when npm test command is executed with  arguments, it fails, e.g.
-// UNKNOWN_OPTION: Unknown option: --coverage
-// workaround: comment out main() in mdlinks.js
 
 // test is executed from repo root directory
 // i.e jest CWD (current working directory) = <path to>/GDL002-md-links/
